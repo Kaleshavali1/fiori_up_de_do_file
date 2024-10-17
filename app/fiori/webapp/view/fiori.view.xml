@@ -1,0 +1,203 @@
+<mvc:View controllerName="com.fiori.fiori.controller.fiori"
+    xmlns:mvc="sap.ui.core.mvc"
+		xmlns="sap.m"
+		xmlns:upload="sap.m.upload"
+	    xmlns:l="sap.ui.layout"
+	    xmlns:form="sap.ui.layout.form"
+        xmlns:u="sap.ui.unified"
+        displayBlock="true">
+	   <Shell id="shell">
+        <App id="app1">
+            <pages>
+                <Page id="page" title="{i18n>title}">
+                    <content>
+                        <Table items="{mainModel>/MediaFile}" id="table0" mode="SingleSelectLeft" selectionChange="onSelect">
+                            <headerToolbar>
+                                <OverflowToolbar>
+                                    <content>
+                                        <ToolbarSpacer />
+                                        <SearchField id="searchField" width="20%" placeholder="search" search=".onSearch" />
+                                        <Button id="createButton" icon="sap-icon://add" tooltip="Create" visible="true" press="onOpenAddDialog">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+                                        <Button id="deleteButton" icon="sap-icon://delete" tooltip="Delete" visible="false" press="onDelete">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+
+                                        <Button id="saveButton" text="Save" type="Emphasized" visible="false" enabled="true" press="onSave" />
+                                        <Button id="editModeButton" visible="true" icon="sap-icon://edit" tooltip="Edit" press="onEditMode">
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData priority="NeverOverflow" />
+                                            </layoutData>
+                                        </Button>
+
+                                    </content>
+                                  
+
+                                </OverflowToolbar>
+                            </headerToolbar>
+                            <items>
+                                <ColumnListItem type="Active" id="item0">
+                                    <cells>
+    
+                                        <Text id="id1" text="{mainModel>id}"/>
+                                        <Text id="id2" text="{mainModel>mediaType}"/>
+                                        <Text id="id3" text="{mainModel>content}"/>
+                                        <Text id="id4" text="{mainModel>fileName}"/>
+                                        <Text id="id5" text="{mainModel>url}"/>
+                                        <Button id="id6" icon="sap-icon://edit" onPress="onSelect" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                            <columns>
+                                <Column>
+                                    <header>
+                                        <Label text="id" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="mediaType" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="Content" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="filename" />
+                                    </header>
+                                </Column>
+                                <Column>
+                                    <header>
+                                        <Label text="url" />
+                                    </header>
+                                </Column>
+                            </columns>
+                        </Table>
+
+
+                        <!-- <FlexBox direction="Column" class="sapUiLargeMargin">
+                            <Label text="Attach File" labelFor="fileUploader" required="true"/>
+                            <u:FileUploader id="__fileUploader" tooltip="Upload your file to DB" change="onFileChange"/>
+                            <Button text="Upload" press="onUploadFile" type="Emphasized"/>
+                            	<Image ariaDetails="detailsActiveImage" src="media_srv/v2/media/MediaFile(1)/content"
+					decorative="false"/>
+                        </FlexBox> -->
+                        
+                    </content>
+                    	<upload:UploadSet
+				id="UploadSet"
+				instantUpload="true"
+				showIcons="true"
+				uploadEnabled="true"
+				terminationEnabled="true"
+				fileTypes="txt,doc,png"
+				maxFileNameLength="30"
+				maxFileSize="200"
+				mediaTypes="text/plain,application/msword,image/png"
+				uploadUrl="../../../../upload"
+				items="{path: '/items', templateShareable: false}"
+				mode="MultiSelect"
+				selectionChanged="onSelectionChange">
+			<upload:toolbar>
+				<OverflowToolbar>
+					<ToolbarSpacer/>
+					<Button
+							id="uploadSelectedButton"
+							text="Upload selected"
+							press="onUploadSelectedButton"/>
+					<Button
+							id="downloadSelectedButton"
+							text="Download selected"
+							press="onDownloadSelectedButton"/>
+					<Button
+							id="versionButton"
+							enabled="false"
+							text="Upload a new version"
+							press="onVersionUpload"/>
+					<upload:UploadSetToolbarPlaceholder />
+				</OverflowToolbar>
+			</upload:toolbar>
+			<upload:items>
+				<upload:UploadSetItem
+						fileName="{fileName}"
+						mediaType="{mediaType}"
+						url="{url}"
+						thumbnailUrl="{thumbnailUrl}"
+						markers="{path: 'markers', templateShareable: false}"
+						statuses="{path: 'statuses', templateShareable: false}"
+						uploadState="{uploadState}">
+					<upload:markers>
+						<ObjectMarker
+								type="{type}"
+								visibility="{visibility}"/>
+					</upload:markers>
+					<upload:statuses>
+						<ObjectStatus
+								title="{title}"
+								text="{text}"
+								state="{state}"
+								icon="{icon}"
+								active="{active}"/>
+					</upload:statuses>
+				</upload:UploadSetItem>
+			</upload:items>
+		</upload:UploadSet>
+                  
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+    <!-- <upload:UploadSet
+    id="UploadSet"
+    instantUpload="true"
+    showIcons="true"
+    uploadEnabled="true"
+    terminationEnabled="true"
+    fileTypes="txt,doc,png"
+    maxFileNameLength="30"
+    maxFileSize="200"
+    mediaTypes="text/plain,application/msword,image/png"
+    uploadUrl="../../../../upload"
+    items="{path: '/mediaFiles', templateShareable: false}"
+    mode="MultiSelect"
+    selectionChanged="onSelectionChange">
+    <upload:toolbar>
+        <OverflowToolbar>
+            <ToolbarSpacer/>
+            <Button
+                id="uploadSelectedButton"
+                text="Upload selected"
+                press="onUploadSelectedButton"/>
+            <Button
+                id="downloadSelectedButton"
+                text="Download selected"
+                press="onDownloadSelectedButton"/>
+            <Button
+                id="versionButton"
+                enabled="false"
+                text="Upload a new version"
+                press="onVersionUpload"/>
+            <upload:UploadSetToolbarPlaceholder />
+        </OverflowToolbar>
+    </upload:toolbar>
+    <upload:items>
+        <upload:UploadSetItem
+            fileName="{fileName}"
+            mediaType="{mediaType}"
+            url="{url}"
+        >
+            	
+        </upload:UploadSetItem>
+    </upload:items>
+</upload:UploadSet> -->
+
+
+</mvc:View>
