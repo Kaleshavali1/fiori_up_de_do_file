@@ -22,13 +22,13 @@
                                                 <OverflowToolbarLayoutData priority="NeverOverflow" />
                                             </layoutData>
                                         </Button>
-                                        <Button id="deleteButton" icon="sap-icon://delete" tooltip="Delete" visible="false" press="onDelete">
+                                        <Button id="deleteButton" icon="sap-icon://delete" tooltip="Delete" visible="true" press="onDelete">
                                             <layoutData>
                                                 <OverflowToolbarLayoutData priority="NeverOverflow" />
                                             </layoutData>
                                         </Button>
 
-                                        <Button id="saveButton" text="Save" type="Emphasized" visible="false" enabled="true" press="onSave" />
+                                        <Button id="saveButton" text="Save" type="Emphasized" visible="true" enabled="true" press="onSave" />
                                         <Button id="editModeButton" visible="true" icon="sap-icon://edit" tooltip="Edit" press="onEditMode">
                                             <layoutData>
                                                 <OverflowToolbarLayoutData priority="NeverOverflow" />
@@ -49,7 +49,7 @@
                                         <Text id="id3" text="{mainModel>content}"/>
                                         <Text id="id4" text="{mainModel>fileName}"/>
                                         <Text id="id5" text="{mainModel>url}"/>
-                                        <Button id="id6" icon="sap-icon://edit" onPress="onSelect" />
+                                        <Button id="id6" icon="sap-icon://edit" press="onSelect" />
                                     </cells>
                                 </ColumnListItem>
                             </items>
@@ -90,7 +90,7 @@
                             	<Image ariaDetails="detailsActiveImage" src="media_srv/v2/media/MediaFile(1)/content"
 					decorative="false"/>
                         </FlexBox> -->
-                        
+
                     </content>
                     	<upload:UploadSet
 				id="UploadSet"
@@ -102,10 +102,11 @@
 				maxFileNameLength="30"
 				maxFileSize="200"
 				mediaTypes="text/plain,application/msword,image/png"
-				uploadUrl="../../../../upload"
-				items="{path: '/items', templateShareable: false}"
+				uploadUrl="../media/MediaFile/content"
+				items="{mainModel>/MediaFile}"
 				mode="MultiSelect"
-				selectionChanged="onSelectionChange">
+				selectionChanged="onSelectionChange"
+                afterItemRemoved="onAfterItemRemoved">
 			<upload:toolbar>
 				<OverflowToolbar>
 					<ToolbarSpacer/>
@@ -126,27 +127,8 @@
 				</OverflowToolbar>
 			</upload:toolbar>
 			<upload:items>
-				<upload:UploadSetItem
-						fileName="{fileName}"
-						mediaType="{mediaType}"
-						url="{url}"
-						thumbnailUrl="{thumbnailUrl}"
-						markers="{path: 'markers', templateShareable: false}"
-						statuses="{path: 'statuses', templateShareable: false}"
-						uploadState="{uploadState}">
-					<upload:markers>
-						<ObjectMarker
-								type="{type}"
-								visibility="{visibility}"/>
-					</upload:markers>
-					<upload:statuses>
-						<ObjectStatus
-								title="{title}"
-								text="{text}"
-								state="{state}"
-								icon="{icon}"
-								active="{active}"/>
-					</upload:statuses>
+				<upload:UploadSetItem>
+					
 				</upload:UploadSetItem>
 			</upload:items>
 		</upload:UploadSet>

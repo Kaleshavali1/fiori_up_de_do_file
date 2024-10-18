@@ -8,4 +8,5 @@ entity MediaFile {
         mediaType : String;
         fileName  : String;
         url       : String;
+       
 };

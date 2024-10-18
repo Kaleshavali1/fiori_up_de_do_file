@@ -6,12 +6,13 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@cap-js/attachments": "github:cap-js/attachments",
     "@sap/cds": "^8",
     "express": "^4"
   },
   "devDependencies": {
-    "@cap-js/sqlite": "^1",
     "@cap-js/cds-types": "^0.6",
+    "@cap-js/sqlite": "^1",
     "@sap/ux-specification": "UI5-1.129"
   },
   "scripts": {

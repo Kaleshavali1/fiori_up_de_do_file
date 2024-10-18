@@ -14,7 +14,7 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader) {
 			var sPath = sap.ui.require.toUrl("https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile"),
 				oUploadSet = this.byId("UploadSet");
 
-			this.getView().setModel(new JSONModel(sPath));
+			 this.getView().setModel(new JSONModel(sPath));
 
 			// Modify "add file" button
 			oUploadSet.getDefaultFileUploader().setButtonOnly(false);
@@ -22,47 +22,71 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader) {
 			oUploadSet.getDefaultFileUploader().setIconOnly(true);
 			oUploadSet.getDefaultFileUploader().setIcon("sap-icon://attachment");
 			oUploadSet.attachUploadCompleted(this.onUploadCompleted.bind(this));
+			
 		},
-		onUploadSelectedButton: function () {
-			var oUploadSet = this.byId("UploadSet");
+   
+	onUploadSelectedButton: function () {
+		var oUploadSet = this.byId("UploadSet");
 
-			oUploadSet.getItems().forEach(function (oItem) {
-				if (oItem.getListItem().getSelected()) {
-					oUploadSet.uploadItem(oItem);
-				}
-			});
-		},
-		onDownloadSelectedButton: function () {
-			var oUploadSet = this.byId("UploadSet");
+		oUploadSet.getItems().forEach(function (oItem) {
+			if (oItem.getListItem().getSelected()) {
+				oUploadSet.uploadItem(oItem);
+			}
+		});
+	},
+	onDownloadSelectedButton: function () {
+		var oUploadSet = this.byId("UploadSet");
 
-			oUploadSet.getItems().forEach(function (oItem) {
-				if (oItem.getListItem().getSelected()) {
-					oItem.download(true);
-				}
-			});
-		},
-		onSelectionChange: function() {
-			var oUploadSet = this.byId("UploadSet");
-			// If there's any item selected, sets version button enabled
-			if (oUploadSet.getSelectedItems().length > 0) {
-				if (oUploadSet.getSelectedItems().length === 1) {
-					this.byId("versionButton").setEnabled(true);
-				} else {
-					this.byId("versionButton").setEnabled(false);
-				}
+		oUploadSet.getItems().forEach(function (oItem) {
+			if (oItem.getListItem().getSelected()) {
+				oItem.download(true);
+			}
+		});
+	},
+	onSelectionChange: function() {
+		var oUploadSet = this.byId("UploadSet");
+		// If there's any item selected, sets version button enabled
+		if (oUploadSet.getSelectedItems().length > 0) {
+			if (oUploadSet.getSelectedItems().length === 1) {
+				this.byId("versionButton").setEnabled(true);
 			} else {
 				this.byId("versionButton").setEnabled(false);
 			}
-		},
-		onVersionUpload: function(oEvent) {
-			var oUploadSet = this.byId("UploadSet");
-			this.oItemToUpdate = oUploadSet.getSelectedItem()[0];
-			oUploadSet.openFileDialog(this.oItemToUpdate);
-		},
-		onUploadCompleted: function(oEvent) {
-			this.oItemToUpdate = null;
+		} else {
 			this.byId("versionButton").setEnabled(false);
 		}
+	},
+	onVersionUpload: function(oEvent) {
+		var oUploadSet = this.byId("UploadSet");
+		this.oItemToUpdate = oUploadSet.getSelectedItem()[0];
+		oUploadSet.openFileDialog(this.oItemToUpdate);
+	},
+	onUploadCompleted: function(oEvent) {
+		this.oItemToUpdate = null;
+		this.byId("versionButton").setEnabled(false);
+		// add item to the model
+		var oItem = oEvent.getParameter("item");
+		var oModel = this.getView().getModel();
+		var aItems = oModel.getProperty("mainModel>/MediaFile");
+		var oItemData = this._getItemData(oItem);
+		aItems.unshift(oItemData);
+		oModel.setProperty("mainModel>/MediaFile", aItems);
+		oModel.refresh();
+	},
+	onAfterItemRemoved: function(oEvent) {
+		// remove item from the model
+		var oItem = oEvent.getParameter("item");
+		var oModel = this.getView().getModel();
+		var aItems = oModel.getProperty("mainModel>/MediaFile");
+		var oItemData = oItem?.getBindingContext()?.getObject();
+		var iIndex = aItems.findIndex((item) => {
+			return item.id == oItemData?.id;
+		});
+		if (iIndex > -1) {
+			aItems.splice(iIndex, 1);
+			oModel.setProperty("mainModel>/MediaFile", aItems);
+		}
+	},
 });
 });
 // sap.ui.define([
