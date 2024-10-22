@@ -11,6 +11,7 @@
             <pages>
                 <Page id="page" title="{i18n>title}">
                     <content>
+                    <!--this code data is using by mainfest mainModel by odata service-->
                         <Table items="{mainModel>/MediaFile}" id="table0" mode="SingleSelectLeft" selectionChange="onSelect">
                             <headerToolbar>
                                 <OverflowToolbar>
@@ -90,7 +91,7 @@
                             	<Image ariaDetails="detailsActiveImage" src="media_srv/v2/media/MediaFile(1)/content"
 					decorative="false"/>
                         </FlexBox> -->
-
+<!--this code data is using by controller-->
                     </content>
                     	<upload:UploadSet
 				id="UploadSet"
@@ -102,10 +103,11 @@
 				maxFileNameLength="30"
 				maxFileSize="200"
 				mediaTypes="text/plain,application/msword,image/png"
-				uploadUrl="../media/MediaFile/content"
-				items="{mainModel>/MediaFile}"
+				uploadUrl="/media/MediaFile"
+				items="{path: 'mediafile>/', templateShareable: false}"
 				mode="MultiSelect"
 				selectionChanged="onSelectionChange"
+                beforeItemAdded="onBeforeItemAdded"
                 afterItemRemoved="onAfterItemRemoved">
 			<upload:toolbar>
 				<OverflowToolbar>
@@ -114,6 +116,10 @@
 							id="uploadSelectedButton"
 							text="Upload selected"
 							press="onUploadSelectedButton"/>
+                        <Button
+							id="deleteSelectedButton"
+							text="delete selected"
+							press="onDeleteSelect"/>
 					<Button
 							id="downloadSelectedButton"
 							text="Download selected"
@@ -127,8 +133,10 @@
 				</OverflowToolbar>
 			</upload:toolbar>
 			<upload:items>
-				<upload:UploadSetItem>
-					
+				<upload:UploadSetItem
+						fileName="{mediafile>fileName}"
+						mediaType="{mediafile>mediaType}"
+						url="{mediafile>url}">
 				</upload:UploadSetItem>
 			</upload:items>
 		</upload:UploadSet>

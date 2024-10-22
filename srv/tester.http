@@ -1,0 +1,16 @@
+###
+post http://localhost:4004/media/MediaFile
+Content-Type: application/json
+   
+   { 
+        "id": "5", 
+        "content": "/path/to/image1.jpg",
+        "mediaType": "image/jpeg",
+        "fileName": "image1.jpg",
+        "url": "http://example.com/image1.jpg"
+    }
+
+###
+http://localhost:4004/media/MediaFile
+
+

@@ -1,5 +1,6 @@
-id,mediaType,content,fileName,url
-1,image/jpeg,"/path/to/image1.jpg","image1.jpg","http://example.com/image1.jpg"
-2,application/pdf,"/path/to/document1.pdf","document1.pdf","http://example.com/document1.pdf"
-3,image/png,"/path/to/image2.png","image2.png","http://example.com/image2.png"
-4,audio/mpeg,"/path/to/audio1.mp3","audio1.mp3","http://example.com/audio1.mp3"
+id,content,mediaType,fileName,url
+201878, ,application/msword,Business Plan Agenda.doc,demokit/sample/UploadCollection/LinkedDocuments/Business Plan Agenda.doc
+201879, ,application/pdf,Project Proposal.pdf,demokit/sample/UploadCollection/LinkedDocuments/Project Proposal.pdf
+201880, ,application/vnd.ms-excel,Financial Report.xlsx,demokit/sample/UploadCollection/LinkedDocuments/Financial Report.xlsx
+201881, ,application/vnd.openxmlformats-officedocument.wordprocessingml.document,Meeting Minutes.docx,demokit/sample/UploadCollection/LinkedDocuments/Meeting Minutes.docx
+201882, ,image/png,Company Logo.png,demokit/sample/UploadCollection/LinkedDocuments/Company Logo.png
