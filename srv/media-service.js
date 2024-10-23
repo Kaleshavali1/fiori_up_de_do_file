@@ -29,8 +29,9 @@ module.exports = cds.service.impl(async function () {
     //     //Assign the url by appending the id
     //     req.data.url = `/media/MediaFile(${req.data.id})/content`;
     // });
-    
+
 this.on('CREATE',MediaFile,async (req) =>{
+    console.log(req.data);
     const {id,content,mediaType,fileName,url} =req.data;
      const newAsset={
         id,

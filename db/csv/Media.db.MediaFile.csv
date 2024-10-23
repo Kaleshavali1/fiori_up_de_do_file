@@ -1,5 +1,5 @@
 id,content,mediaType,fileName,url
-201878, ,application/msword,Business Plan Agenda.doc,demokit/sample/UploadCollection/LinkedDocuments/Business Plan Agenda.doc
+201878, ,application/msword,Business Plan Agenda.doc,https://sapui5.hana.ondemand.com/#/entity/sap.m.upload.UploadSet/sample/sap.m.sample.UploadSet/code
 201879, ,application/pdf,Project Proposal.pdf,demokit/sample/UploadCollection/LinkedDocuments/Project Proposal.pdf
 201880, ,application/vnd.ms-excel,Financial Report.xlsx,demokit/sample/UploadCollection/LinkedDocuments/Financial Report.xlsx
 201881, ,application/vnd.openxmlformats-officedocument.wordprocessingml.document,Meeting Minutes.docx,demokit/sample/UploadCollection/LinkedDocuments/Meeting Minutes.docx

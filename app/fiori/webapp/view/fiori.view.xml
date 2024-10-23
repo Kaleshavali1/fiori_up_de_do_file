@@ -99,15 +99,16 @@
 				showIcons="true"
 				uploadEnabled="true"
 				terminationEnabled="true"
-				fileTypes="txt,doc,png"
+				fileTypes="txt,doc,png,json"
 				maxFileNameLength="30"
 				maxFileSize="200"
-				mediaTypes="text/plain,application/msword,image/png"
-				uploadUrl="/media/MediaFile"
+				mediaTypes="text/plain,application/msword,image/png,application/json"
+				uploadUrl="https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile"
 				items="{path: 'mediafile>/', templateShareable: false}"
 				mode="MultiSelect"
 				selectionChanged="onSelectionChange"
                 beforeItemAdded="onBeforeItemAdded"
+                afterItemAdded="afterItemAdded"
                 afterItemRemoved="onAfterItemRemoved">
 			<upload:toolbar>
 				<OverflowToolbar>
@@ -115,7 +116,7 @@
 					<Button
 							id="uploadSelectedButton"
 							text="Upload selected"
-							press="onUploadSelectedButton"/>
+							press="onUploadSelectedButton" visible="false"/>
                         <Button
 							id="deleteSelectedButton"
 							text="delete selected"
@@ -136,7 +137,8 @@
 				<upload:UploadSetItem
 						fileName="{mediafile>fileName}"
 						mediaType="{mediafile>mediaType}"
-						url="{mediafile>url}">
+						url="{mediafile>url}"
+                        thumbnailUrl="{thumbnailUrl}">
 				</upload:UploadSetItem>
 			</upload:items>
 		</upload:UploadSet>

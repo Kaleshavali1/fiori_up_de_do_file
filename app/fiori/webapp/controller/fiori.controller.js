@@ -70,10 +70,11 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader) {
        
             const formData = new FormData();
             formData.append('file', oItem.oFileObject); // Adjust key based on your API
-       
+		
             fetch(url, {
                 method: 'POST',
                 body: formData // Use FormData for file uploads
+				
             })
             .then(response => {
                 if (!response.ok) {
@@ -88,7 +89,7 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader) {
                 console.error('There was a problem with the fetch operation:', error);
             });
         },
-       
+		
 	onUploadSelectedButton: function () {
 		var oUploadSet = this.byId("UploadSet");
 
