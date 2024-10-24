@@ -3,9 +3,10 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/core/Item",
 	"sap/ui/model/json/JSONModel",
-	"sap/m/upload/Uploader"
+	"sap/m/upload/Uploader",
+	"sap/m/MessageBox"
 ],
-function (MobileLibrary, Controller, Item, JSONModel, Uploader) {
+function (MobileLibrary, Controller, Item, JSONModel, Uploader,MessageBox) {
     "use strict";
 
     return Controller.extend("com.fiori.fiori.controller.fiori", {
@@ -44,7 +45,13 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader) {
 			oUploadSet.getDefaultFileUploader().setIcon("sap-icon://attachment");
 			oUploadSet.attachUploadCompleted(this.onUploadCompleted.bind(this));
 			
+			
 		},
+        
+
+       
+
+
 
 		onselect(){
 			var oUploadSet = this.byId("table0");
@@ -58,37 +65,54 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader) {
 				oUploadSet.removeItem(oItem);
 			});
 		},
+        onAfterItemAdded: async function (oEvent) {
+           
+            const oUploadSet = this.byId("UploadSet");
+            // const i18n = this.getModel("i18n").getResourceBundle();
+            const oItem = oEvent.getParameter("item");
+			const oDataModel = oUploadSet.getModel();
+           
+			// const sServiceUrl = oDataModel.sServiceUrl;
+			
+			// const oContext = this.getView().getBindingContext(); // Use this to get the binding context
+			// const sHeaderId = oContext ? oContext.getObject().id : null; // Safely access ID
+           
+            // const CSRFToken = oDataModel.getHttpHeaders()["X-CSRF-Token"]
+            const oUploadData = {
+                mediaType: oItem.getMediaType(),
+                fileName: oItem.getFileName(),
+				size: oItem.getFileObject().size,
+				// size: oItem.getFileObject().size // Adding file size
+				url: oItem.url  // Adding the URL if oItem has a method or property for URL
+            };
+            const oSettings = {
+                url: `/media/MediaFile`,
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+					
+                },
+                data: JSON.stringify(oUploadData)
+            };
 
-		onBeforeItemAdded: function (oEvent) {
-            const oUploadSet = oEvent.getSource();
-            const oParameters = oEvent.getParameters();
-            const oItem = oParameters.item;
-       
-            console.log("File added: " + oItem);
-       
-            const url = 'https://port4004-workspaces-ws-f7mzc.us10.trial.applicationstudio.cloud.sap/media/MediaFile';
-       
-            const formData = new FormData();
-            formData.append('file', oItem.oFileObject); // Adjust key based on your API
-		
-            fetch(url, {
-                method: 'POST',
-                body: formData // Use FormData for file uploads
-				
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
+          try{
+			const result =await $.ajax(oSettings);
+			const id = result.id;
+                    const url = `/media/MediaFile/${id}/content`;
+                    oItem.setUploadUrl(url);
+					oUploadSet.setHttpRequestMethod("PUT");
+                    oUploadSet.removeAllHeaderFields()
+                    oUploadSet.addHeaderField(new Item({
+                        key: 'X-CSRF-Token',
+                        text: CSRFToken
+                    }));
+                    oUploadSet.uploadItem(oItem);
                 }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Success:', data); // Handle the response data
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-            });
+                catch(error){
+                    console.log("fileUploadErr", error.responseJSON?.error?.message || "upload failed");
+                }
         },
+
 		
 	onUploadSelectedButton: function () {
 		var oUploadSet = this.byId("UploadSet");
@@ -138,16 +162,20 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader) {
 		oUploadSet.openFileDialog(this.oItemToUpdate);
 	},
 	onUploadCompleted: function(oEvent) {
-		this.oItemToUpdate = null;
-		this.byId("versionButton").setEnabled(false);
-		// add item to the model
-		var oItem = oEvent.getParameter("item");
-		var oModel = this.getView().getModel();
-		var aItems = oModel.getProperty("http://localhost:4004/media/MediaFile");
-		var oItemData = this._getItemData(oItem);
-		aItems.unshift(oItemData);
-		oModel.setProperty("http://localhost:4004/media/MediaFile", aItems);
-		oModel.refresh();
+		// this.oItemToUpdate = null;
+		// this.byId("versionButton").setEnabled(false);
+		// // add item to the model
+		// var oItem = oEvent.getParameter("item");
+		// var oModel = this.getView().getModel();
+		// var aItems = oModel.getProperty("/media/MediaFile");
+		// var oItemData = this._getItemData(oItem);
+		// aItems.unshift(oItemData);
+		// oModel.setProperty("/media/MediaFile", aItems);
+		// oModel.refresh();
+		var oUploadSet = this.byId("UploadSet");
+		oUploadSet.removeAllIncompleteItems();
+		oUploadSet.getBinding("items").refresh();
+
 	},
 	onAfterItemRemoved: function(oEvent) {
 		// remove item from the model

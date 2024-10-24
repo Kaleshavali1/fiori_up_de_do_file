@@ -1,4 +1,4 @@
-const SequenceHelper = require("./library/SequenceHelper");
+
 const { Readable, PassThrough } = require("stream");
 const cds = require('@sap/cds');
 cds.env.features.fetch_csrf = true
@@ -10,26 +10,7 @@ module.exports = cds.service.impl(async function () {
     } = this.entities;
 
 
-    /**
-     * Handler method called before creating data entry
-     * for entity Mediafile.
-     */
-    // this.before('CREATE', MediaFile, async (req) => {
-    //     const db = await cds.connect.to("db");
-    //     // Create Constructor for SequenceHelper 
-    //     // Pass the sequence name and db
-    //     const SeqReq = new SequenceHelper({
-    //         sequence: "MEDIA_ID",
-    //         db: db,
-    //     });
-    //     //Call method getNextNumber() to fetch the next sequence number 
-    //     let seq_no = await SeqReq.getNextNumber();
-    //     // Assign the sequence number to id element
-    //     req.data.id = seq_no;
-    //     //Assign the url by appending the id
-    //     req.data.url = `/media/MediaFile(${req.data.id})/content`;
-    // });
-
+   
 this.on('CREATE',MediaFile,async (req) =>{
     console.log(req.data);
     const {id,content,mediaType,fileName,url} =req.data;
@@ -44,7 +25,20 @@ this.on('CREATE',MediaFile,async (req) =>{
 
         // Return the created asset
         return result[0];
-})
+});
+
+this.on('PUT', MediaFile, async (req) => {
+    console.log("put");
+    const mediaId = req.params.mediaId;
+    const content = req.rawBody; // Get binary content from the request
+
+    try {
+        await srv.transaction(req).update(MediaFile, mediaId, { content });
+        req.reply(); // No content to return
+    } catch (error) {
+        req.error(500, `Error updating media content: ${error.message}`);
+    }
+});
     /**
      * Handler method called on reading data entry
      * for entity Mediafile.

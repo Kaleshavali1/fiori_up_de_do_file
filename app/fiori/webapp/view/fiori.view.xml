@@ -46,8 +46,9 @@
                                     <cells>
     
                                         <Text id="id1" text="{mainModel>id}"/>
-                                        <Text id="id2" text="{mainModel>mediaType}"/>
-                                        <Text id="id3" text="{mainModel>content}"/>
+                                        <Text id="id2" text="{mainModel>content}"/>
+                                        <Text id="id3" text="{mainModel>mediaType}"/>
+                                        
                                         <Text id="id4" text="{mainModel>fileName}"/>
                                         <Text id="id5" text="{mainModel>url}"/>
                                         <Button id="id6" icon="sap-icon://edit" press="onSelect" />
@@ -99,16 +100,16 @@
 				showIcons="true"
 				uploadEnabled="true"
 				terminationEnabled="true"
-				fileTypes="txt,doc,png,json"
+				fileTypes="txt,doc,png,json,pdf"
 				maxFileNameLength="30"
 				maxFileSize="200"
-				mediaTypes="text/plain,application/msword,image/png,application/json"
+				mediaTypes="text/plain,application/msword,image/png,application/json,application/pdf"
 				uploadUrl="https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile"
 				items="{path: 'mediafile>/', templateShareable: false}"
 				mode="MultiSelect"
 				selectionChanged="onSelectionChange"
                 beforeItemAdded="onBeforeItemAdded"
-                afterItemAdded="afterItemAdded"
+                afterItemAdded="onAfterItemAdded"
                 afterItemRemoved="onAfterItemRemoved">
 			<upload:toolbar>
 				<OverflowToolbar>

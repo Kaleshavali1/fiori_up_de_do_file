@@ -62,6 +62,8 @@
           "bundleName": "com.fiori.fiori.i18n.i18n"
         }
       },
+
+
       "mainModel": {
         "type": "sap.ui.model.odata.v4.ODataModel",
         "dataSource": "mainService",
@@ -116,6 +118,17 @@
       "type": "XML",
       "async": true,
       "id": "App"
-    }
+    },
+    "config": {
+			"sample": {
+				"stretch": true,
+				"files": [
+					"fiori.view.xml",
+					"fiori.controller.js",
+					"items.json",
+					"manifest.json"
+				]
+			}
+		}
   }
 }
