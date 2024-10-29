@@ -5,9 +5,9 @@ entity MediaFile {
     key id        : UUID;
      @Core.ContentDisposition.Type: 'inline'
         @Core.MediaType   : mediaType
-        content   : LargeBinary;
+        content   : LargeBinary;   //binary content of the file
        @Core.IsMediaType : true
-        mediaType : String;
+        mediaType : String;  //MIME type of the file
         fileName  : String;
         size          : Integer;   
         url       : String;     

@@ -153,11 +153,11 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader,MessageBox) {
            
                     console.log(byteArray); // This is your file data in binary format
                     // Now you can use byteArray for further processing
-                    // const sServiceUrl = oDataModel.sServiceUrl;
+                    const sServiceUrl = oDataModel.sServiceUrl;
        
                     try {
                         // Perform the Fetch POST request to create the media record
-                        const postResponse = await fetch(`https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile`, {
+                        const postResponse = await fetch(`${sServiceUrl}/MediaFile`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -165,6 +165,7 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader,MessageBox) {
                             body: JSON.stringify({
                                 "fileName": file.name,
                                 "mediaType": file.type,
+                                "size": file.size
                             }),
                         });
            
@@ -176,7 +177,7 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader,MessageBox) {
                         const mediaId = postData.id; // Get the ID of the newly created media
            
                         // Now prepare to update the content with a PUT request
-                        const putResponse =  await fetch(`https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile(${mediaId})/content`, {
+                        const putResponse =  await fetch(`${sServiceUrl}/MediaFile(${mediaId})/content`, {
                             method: 'PUT',
                             body: byteArray, // Updated content
                         });
@@ -186,7 +187,11 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader,MessageBox) {
                         }
            
                         console.log("Media content updated successfully.");
-                        oDataModel.refresh(true);
+                        const oBinding = oUploadSet.getBinding("items");
+                        if (oBinding){
+                            oBinding.refresh();
+                        }
+                      
                     } catch (error) {
                         console.log("fileUploadErr", error.message || "Upload failed.");
                     }

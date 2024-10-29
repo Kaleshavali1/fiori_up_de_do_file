@@ -5,9 +5,10 @@
 sap.ui.define([
         "sap/ui/core/UIComponent",
         "sap/ui/Device",
-        "com/fiori/fiori/model/models"
+        "com/fiori/fiori/model/models",
+        "sap/ui/model/odata/v4/ODataModel"
     ],
-    function (UIComponent, Device, models) {
+    function (UIComponent, Device, models,ODataModel) {
         "use strict";
 
         return UIComponent.extend("com.fiori.fiori.Component", {
@@ -29,7 +30,9 @@ sap.ui.define([
 
                 // set the device model
                // set data model
-               var oDataModel = new sap.ui.model.odata.v2.ODataModel("https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/odata/v2/media");
+               var oDataModel = new ODataModel(
+                { serviceUrl: "https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/"
+            });
                console.log(oDataModel);
                this.setModel(oDataModel);
             }

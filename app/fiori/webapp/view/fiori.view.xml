@@ -12,7 +12,7 @@
                 <Page id="page" title="{i18n>title}">
                     <content>
                     <!--this code data is using by mainfest mainModel by odata service-->
-                        <Table items="{mainModel>/MediaFile}" id="table0" mode="SingleSelectLeft" selectionChange="onSelect">
+                        <Table items="{/MediaFile}" id="table0" mode="SingleSelectLeft" selectionChange="onSelect">
                             <headerToolbar>
                                 <OverflowToolbar>
                                     <content>
@@ -45,12 +45,12 @@
                                 <ColumnListItem type="Active" id="item0">
                                     <cells>
     
-                                        <Text id="id1" text="{mainModel>id}"/>
-                                        <Text id="id2" text="{mainModel>content}"/>
-                                        <Text id="id3" text="{mainModel>mediaType}"/>
+                                        <Text id="id1" text="{id}"/>
+                                        <Text id="id2" text="{content}"/>
+                                        <Text id="id3" text="{mediaType}"/>
                                         
-                                        <Text id="id4" text="{mainModel>fileName}"/>
-                                        <Text id="id5" text="{mainModel>url}"/>
+                                        <Text id="id4" text="{fileName}"/>
+                                        <Text id="id5" text="{url}"/>
                                         <Button id="id6" icon="sap-icon://edit" press="onSelect" />
                                     </cells>
                                 </ColumnListItem>
@@ -104,7 +104,7 @@
 				maxFileNameLength="30"
 				maxFileSize="20000"
 				mediaTypes="text/plain,application/msword,image/png,image/jpg,application/json,application/pdf"
-                items="{path: 'mainModel>/MediaFile'}"
+                items="{path: '/MediaFile'}"
 				
 				
 				mode="MultiSelect"
@@ -146,9 +146,9 @@
                         thumbnailUrl="{thumbnailUrl}">						
 				</upload:UploadSetItem> -->
 				<upload:UploadSetItem
-						fileName="{mainModel>fileName}"
-						mediaType="{mainModel>mediaType}"
-						url="{mainModel>url}">						
+						fileName="{fileName}"
+						mediaType="{mediaType}"
+						url="{url}">						
 				
 				</upload:UploadSetItem>
 			</upload:items>
