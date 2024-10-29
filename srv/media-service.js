@@ -11,34 +11,34 @@ module.exports = cds.service.impl(async function () {
 
 
    
-this.on('CREATE',MediaFile,async (req) =>{
-    console.log(req.data);
-    const {id,content,mediaType,fileName,url} =req.data;
-     const newAsset={
-        id,
-        content,
-        mediaType,
-        fileName,
-        url
-     }
-    const result = await cds.tx(req).run(INSERT.into(MediaFile).entries(newAsset));
+// this.on('CREATE',MediaFile,async (req) =>{
+//     console.log(req.data);
+//     const {id,content,mediaType,fileName,url} =req.data;
+//      const newAsset={
+//         id,
+//         content,
+//         mediaType,
+//         fileName,
+//         url
+//      }
+//     const result = await cds.tx(req).run(INSERT.into(MediaFile).entries(newAsset));
 
-        // Return the created asset
-        return result[0];
-});
+//         // Return the created asset
+//         return result[0];
+// });
 
-this.on('PUT', MediaFile, async (req) => {
-    console.log("put");
-    const mediaId = req.params.mediaId;
-    const content = req.rawBody; // Get binary content from the request
+// this.on('PUT', MediaFile, async (req) => {
+//     console.log("put");
+//     const mediaId = req.params.mediaId;
+//     const content = req.rawBody; // Get binary content from the request
 
-    try {
-        await srv.transaction(req).update(MediaFile, mediaId, { content });
-        req.reply(); // No content to return
-    } catch (error) {
-        req.error(500, `Error updating media content: ${error.message}`);
-    }
-});
+//     try {
+//         await srv.transaction(req).update(MediaFile, mediaId, { content });
+//         req.reply(); // No content to return
+//     } catch (error) {
+//         req.error(500, `Error updating media content: ${error.message}`);
+//     }
+// });
     /**
      * Handler method called on reading data entry
      * for entity Mediafile.
@@ -73,10 +73,16 @@ this.on('PUT', MediaFile, async (req) => {
             return _formatResult(decodedMedia, mediaObj.mediaType);
         } else return next();
     });
+    this.before('CREATE', 'MediaFile', async (req) => {
+
+        req.data.url = `/odata/v4/media/MediaFile(${req.data.id})/content`;
+
+       
+    });
 
     function _formatResult(decodedMedia, mediaType) {
         const readable = new Readable();
-        const result = new Array();
+        const result1 = new Array();
         readable.push(decodedMedia);
         readable.push(null);
         return {

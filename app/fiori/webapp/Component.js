@@ -28,7 +28,10 @@ sap.ui.define([
                 this.getRouter().initialize();
 
                 // set the device model
-                this.setModel(models.createDeviceModel(), "device");
+               // set data model
+               var oDataModel = new sap.ui.model.odata.v2.ODataModel("https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/odata/v2/media");
+               console.log(oDataModel);
+               this.setModel(oDataModel);
             }
         });
     }

@@ -13,37 +13,38 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader,MessageBox) {
         // Assuming this is part of your controller
         onInit: function () {
   // Call the function to fetch data
-  const url = "https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile";
-  const that = this;
-  fetch(url)
-	  .then(response => {
-		  if (!response.ok) {
-			  throw new Error('Network response was not ok ' + response.statusText);
-		  }
-		  return response.json();
-	  })
-	  .then(data => {
-		  console.log(data.value);
-		  var oJSONModel = new JSONModel();
-		  oJSONModel.setData(data.value);
-		  // console.log(oJSONModel,"hii");
-		  that.getView().setModel(oJSONModel, "mediafile")
-	  })
-	  .catch(error => {
-		  console.error('There was a problem with the fetch operation:', error);
-	  });
+//   const url = "https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile";
+//   const that = this;
+//   fetch(url)
+// 	  .then(response => {
+// 		  if (!response.ok) {
+// 			  throw new Error('Network response was not ok ' + response.statusText);
+// 		  }
+// 		  return response.json();
+// 	  })
+// 	  .then(data => {
+// 		  console.log(data.value);
+// 		  var oJSONModel = new JSONModel();
+// 		  oJSONModel.setData(data.value);
+// 		  // console.log(oJSONModel,"hii");
+// 		  that.getView().setModel(oJSONModel, "mediafile")
+// 	  })
+// 	  .catch(error => {
+// 		  console.error('There was a problem with the fetch operation:', error);
+// 	  });
 			
-			var sPath = sap.ui.require.toUrl("http://localhost:4004/media/MediaFile");
-				var oUploadSet = this.byId("UploadSet");
+			// var sPath = sap.ui.require.toUrl("http://localhost:4004/media/MediaFile");
+			// 	var oUploadSet = this.byId("UploadSet");
 
-			 this.getView().setModel(new JSONModel(sPath));
-
+			//  this.getView().setModel(new JSONModel(sPath));
+			 var oUploadSet = this.byId("UploadSet");
+ 
 			// Modify "add file" button
 			oUploadSet.getDefaultFileUploader().setButtonOnly(false);
 			oUploadSet.getDefaultFileUploader().setTooltip("");
 			oUploadSet.getDefaultFileUploader().setIconOnly(true);
 			oUploadSet.getDefaultFileUploader().setIcon("sap-icon://attachment");
-			oUploadSet.attachUploadCompleted(this.onUploadCompleted.bind(this));
+			// oUploadSet.attachUploadCompleted(this.onUploadCompleted.bind(this));
 			
 			
 		},
@@ -65,55 +66,196 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader,MessageBox) {
 				oUploadSet.removeItem(oItem);
 			});
 		},
-        onAfterItemAdded: async function (oEvent) {
-           
+		onAfterItemAdded: async function (oEvent) {
             const oUploadSet = this.byId("UploadSet");
-            // const i18n = this.getModel("i18n").getResourceBundle();
+            
             const oItem = oEvent.getParameter("item");
-			const oDataModel = oUploadSet.getModel();
+            var file = oItem._oFileObject
+        
+            // Access the model from the upload set
+            const oDataModel = oUploadSet.getModel();
+        
+            // // Store file metadata
+            // this.fileName = oItem.getFileName();
+            // this.mediaType = oItem.getMediaType();
+            // this.size = oItem.getFileObject().size;
+        
+			// const reader = new FileReader();
+       
+            // reader.onload = async function (e)  {
+            //     // Get binary data as an ArrayBuffer
+            //     const binaryData = e.target.result;
+            //     const byteArray = new Uint8Array(binaryData);
+       
+            //     const sServiceUrl = oDataModel.sServiceUrl;
+       
+            //     // Prepare upload data for POST request
+            //     const oUploadData = {
+            //         mediaType: this.mediaType,
+            //         fileName: this.fileName,
+            //         size: this.size,
+            //     };
+       
+            //     try {
+            //         // Perform the Fetch POST request to create the media record
+            //         const postResponse = await fetch(`${sServiceUrl}/MediaFile`, {
+            //             method: 'POST',
+            //             headers: {
+            //                 'Content-Type': 'application/json',
+            //             },
+            //             body: JSON.stringify(oUploadData),
+            //         });
+       
+            //         if (!postResponse.ok) {
+            //             throw new Error("POST request failed.");
+            //         }
+       
+            //         const postData = await postResponse.json();
+            //         const mediaId = postData.d.id; // Get the ID of the newly created media
+       
+            //         // Now prepare to update the content with a PUT request
+            //         const putResponse = await fetch(`${sServiceUrl}/MediaFile(${mediaId})/content`, {
+            //             method: 'PUT',
+            //             body: byteArray, // Updated content
+            //         });
+       
+            //         if (!putResponse.ok) {
+            //             throw new Error("PUT request failed.");
+            //         }
+       
+            //         console.log("Media content updated successfully.");
+            //         oDataModel.refresh(true);
+            //     } catch (error) {
+            //         console.log("fileUploadErr", error.message || "Upload failed.");
+            //     }
+            // };
+            // reader.readAsArrayBuffer(oItem._oFileObject);
+       
+            // Read the file as an ArrayBuffer (triggers the onload event)
+            // if (oItem._oFileObject) {
+            //     reader.readAsArrayBuffer(oItem._oFileObject);
+            // } else {
+            //     console.log("No file object found");
+            // }
+            if (file) {
+                // Create a FileReader instance
+                var reader = new FileReader();
+
+                console.log(file);
+               
+                // Define the onload event handler
+                reader.onload = async function(event) {
+                    // Get the binary data as an ArrayBuffer
+                    var binaryData = event.target.result;
+                   
+                    // You can also convert it to a Uint8Array if needed
+                    var byteArray = new Uint8Array(binaryData);
            
-			// const sServiceUrl = oDataModel.sServiceUrl;
+                    console.log(byteArray); // This is your file data in binary format
+                    // Now you can use byteArray for further processing
+                    // const sServiceUrl = oDataModel.sServiceUrl;
+       
+                    try {
+                        // Perform the Fetch POST request to create the media record
+                        const postResponse = await fetch(`https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                "fileName": file.name,
+                                "mediaType": file.type,
+                            }),
+                        });
+           
+                        if (!postResponse.ok) {
+                            throw new Error("POST request failed.");
+                        }
+           
+                        const postData = await postResponse.json();
+                        const mediaId = postData.id; // Get the ID of the newly created media
+           
+                        // Now prepare to update the content with a PUT request
+                        const putResponse =  await fetch(`https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile(${mediaId})/content`, {
+                            method: 'PUT',
+                            body: byteArray, // Updated content
+                        });
+           
+                        if (!putResponse.ok) {
+                            throw new Error("PUT request failed.");
+                        }
+           
+                        console.log("Media content updated successfully.");
+                        oDataModel.refresh(true);
+                    } catch (error) {
+                        console.log("fileUploadErr", error.message || "Upload failed.");
+                    }
+                };
+           
+                // Read the file as an ArrayBuffer (triggers the onload event)
+                reader.readAsArrayBuffer(file);
+            }
+            else {
+                console.log("No file selected.");
+            }
+        },        
+       
+        // onAfterItemAdded: async function (oEvent) {
+           
+        //     const oUploadSet = this.byId("UploadSet");
+        //     // const i18n = this.getModel("i18n").getResourceBundle();
+        //     const oItem = oEvent.getParameter("item");
+		// 	const oDataModel = oUploadSet.getModel();
+		// 	// const sServiceUrl = oDataModel.sServiceUrl;
 			
-			// const oContext = this.getView().getBindingContext(); // Use this to get the binding context
-			// const sHeaderId = oContext ? oContext.getObject().id : null; // Safely access ID
+		// 	// const oContext = this.getView().getBindingContext(); // Use this to get the binding context
+		// 	// const sHeaderId = oContext ? oContext.getObject().id : null; // Safely access ID
            
-            // const CSRFToken = oDataModel.getHttpHeaders()["X-CSRF-Token"]
-            const oUploadData = {
-                mediaType: oItem.getMediaType(),
-                fileName: oItem.getFileName(),
-				size: oItem.getFileObject().size,
-				// size: oItem.getFileObject().size // Adding file size
-				url: oItem.url  // Adding the URL if oItem has a method or property for URL
-            };
-            const oSettings = {
-                url: `/media/MediaFile`,
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json",
+        //     // const CSRFToken = oDataModel.getHttpHeaders()["X-CSRF-Token"]
+        //     const oUploadData = {
+        //         // mediaType: oItem.getMediaType(),
+		// 		 mediaType: oItem.getMediaType() || oItem.getFileObject().type,
+
+		// 		// content: await this.readFileAsBinary(oItem.getFileObject()),
+        //         fileName: oItem.getFileName(),
+		// 		size: oItem.getFileObject().size,
+		// 		// size: oItem.getFileObject().size // Adding file size
+		// 		url: oItem.url  // Adding the URL if oItem has a method or property for URL
+        //     };
+        //     const oSettings = {
+        //         url: `/media/MediaFile`,
+        //         method: "POST",
+        //         headers: {
+        //             "Content-type": "application/json",
 					
-                },
-                data: JSON.stringify(oUploadData)
-            };
+        //         },
+        //         data: JSON.stringify(oUploadData)
+        //     };
 
-          try{
-			const result =await $.ajax(oSettings);
-			const id = result.id;
-                    const url = `/media/MediaFile/${id}/content`;
-                    oItem.setUploadUrl(url);
-					oUploadSet.setHttpRequestMethod("PUT");
-                    oUploadSet.removeAllHeaderFields()
-                    oUploadSet.addHeaderField(new Item({
-                        key: 'X-CSRF-Token',
-                        text: CSRFToken
-                    }));
-                    oUploadSet.uploadItem(oItem);
-                }
-                catch(error){
-                    console.log("fileUploadErr", error.responseJSON?.error?.message || "upload failed");
-                }
+        //   try{
+		// 	const result =await $.ajax(oSettings);
+		// 	const id = result.id;
+        //             const url = `/media/MediaFile/${id}/content`;
+        //             oItem.setUploadUrl(url);
+		// 			oUploadSet.setHttpRequestMethod("PUT");
+        //             oUploadSet.removeAllHeaderFields()
+        //             oUploadSet.addHeaderField(new Item({
+        //                 key: 'X-CSRF-Token',
+        //                 text: CSRFToken
+        //             }));
+        //             oUploadSet.uploadItem(oItem);
+        //         }
+        //         catch(error){
+        //             console.log("fileUploadErr", error.responseJSON?.error?.message || "upload failed");
+        //         }
+        // },
+
+		// Reusable helper method to extract ID from URL
+        extractIdFromUrl: function (url) {
+            const regex = /MediaFile\(([^)]+)\)/; // Regular expression to match the ID
+            const match = url.match(regex);
+            return match ? match[1] : null; // Return the ID or null if not found
         },
-
-		
 	onUploadSelectedButton: function () {
 		var oUploadSet = this.byId("UploadSet");
 
@@ -177,44 +319,39 @@ function (MobileLibrary, Controller, Item, JSONModel, Uploader,MessageBox) {
 		oUploadSet.getBinding("items").refresh();
 
 	},
-	onAfterItemRemoved: function(oEvent) {
+	onAfterItemRemoved: async function (oEvent) {
 		// remove item from the model
-		var oItem = oEvent.getParameter("item");
-		var oModel = this.getView().getModel();
-		var aItems = oModel.getProperty("http://localhost:4004/media/MediaFile");
-		var oItemData = oItem?.getBindingContext()?.getObject();
-		var iIndex = aItems.findIndex((item) => {
-			return item.id == oItemData?.id;
-		});
-		if (iIndex > -1) {
-			aItems.splice(iIndex, 1);
-			oModel.setProperty("http://localhost:4004/media/MediaFile", aItems);
-		}
-	},
-	_getItemData: function(oItem) {
-		const iId = Math.floor(Math.random() * 1000000);
-		const oFileObject = oItem.getFileObject();
-		return {
-			id: iId,
-			fileName: oItem?.getFileName(),
-			uploaded: new Date(),
-			uploadedBy: "John Doe",
-			mediaType: oFileObject.type,
-			// URL to the uploaded file from blob.
-			url: oItem?.getUrl() ? oItem?.getUrl() : URL.createObjectURL(oFileObject),
-			statuses: [
-				{
-					"title": "Uploaded By",
-					"text": "Jane Burns",
-					"active": true
-				},
-				{
-					"title": "Uploaded On",
-					"text": "Today",
-					"active": false
-				}
-			]
-		};
+		const oRemovedItem = oEvent.getParameter("item"); // Get the item removed
+            const sUrl = oRemovedItem.getProperty("url"); // Get the URL from the item
+        
+            // Extract the ID from the URL
+            const mediaId = this.extractIdFromUrl(sUrl);
+            if (!mediaId) {
+                console.error("Unable to extract ID from URL:", sUrl);
+                return;
+            }
+        
+            try {
+                const oUploadSet = this.byId("UploadSet");
+                const sServiceUrl = oUploadSet.getModel().sServiceUrl;
+        
+                // Perform the DELETE request
+                const deleteResponse = await fetch(`${sServiceUrl}/MediaFile(${mediaId})`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+        
+                if (!deleteResponse.ok) {
+                    throw new Error("Failed to delete media item from server.");
+                }
+                oUploadSet.removeItem(oRemovedItem);
+                console.log("Media item successfully deleted from the server.");
+        
+            } catch (error) {
+                console.error("Error deleting media item:", error.message);
+            }
 	}
 	
 });

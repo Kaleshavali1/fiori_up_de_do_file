@@ -100,17 +100,20 @@
 				showIcons="true"
 				uploadEnabled="true"
 				terminationEnabled="true"
-				fileTypes="txt,doc,png,json,pdf"
+				fileTypes="txt,doc,png,json,pdf,jpg"
 				maxFileNameLength="30"
-				maxFileSize="200"
-				mediaTypes="text/plain,application/msword,image/png,application/json,application/pdf"
-				uploadUrl="https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile"
-				items="{path: 'mediafile>/', templateShareable: false}"
+				maxFileSize="20000"
+				mediaTypes="text/plain,application/msword,image/png,image/jpg,application/json,application/pdf"
+                items="{path: 'mainModel>/MediaFile'}"
+				
+				
 				mode="MultiSelect"
 				selectionChanged="onSelectionChange"
                 beforeItemAdded="onBeforeItemAdded"
                 afterItemAdded="onAfterItemAdded"
                 afterItemRemoved="onAfterItemRemoved">
+            <!--items="{path: 'mediafile>/', templateShareable: false}"
+            uploadUrl="https://port4004-workspaces-ws-9bd5s.us10.trial.applicationstudio.cloud.sap/media/MediaFile"-->
 			<upload:toolbar>
 				<OverflowToolbar>
 					<ToolbarSpacer/>
@@ -135,11 +138,18 @@
 				</OverflowToolbar>
 			</upload:toolbar>
 			<upload:items>
-				<upload:UploadSetItem
+            
+				<!-- <upload:UploadSetItem
 						fileName="{mediafile>fileName}"
 						mediaType="{mediafile>mediaType}"
 						url="{mediafile>url}"
-                        thumbnailUrl="{thumbnailUrl}">
+                        thumbnailUrl="{thumbnailUrl}">						
+				</upload:UploadSetItem> -->
+				<upload:UploadSetItem
+						fileName="{mainModel>fileName}"
+						mediaType="{mainModel>mediaType}"
+						url="{mainModel>url}">						
+				
 				</upload:UploadSetItem>
 			</upload:items>
 		</upload:UploadSet>

@@ -11,6 +11,6 @@ Content-Type: application/json
     }
 
 ###
-http://localhost:4004/media/MediaFile
+http://localhost:4004/media/MediaFile(5)/content
 
 
